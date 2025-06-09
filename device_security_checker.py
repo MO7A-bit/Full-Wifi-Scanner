@@ -2,6 +2,7 @@ import sys
 import platform
 import socket
 import subprocess
+import time
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QTextEdit, QLabel, QProgressBar,
     QFileDialog, QHBoxLayout, QComboBox, QMessageBox
@@ -91,7 +92,6 @@ def get_network_info(lang):
 def get_disk_usage(lang):
     import shutil
     info = [LANGS[lang]['disk']]
-    # Use correct root for Windows and Unix
     root = "C:\\" if platform.system() == "Windows" else "/"
     total, used, free = shutil.disk_usage(root)
     info.append(f"Disk Total: {round(total/(1024**3),2)} GB")
@@ -136,6 +136,87 @@ def get_uptime(lang):
         return f"=== System Uptime ===\nUptime: {uptime_str}"
     except Exception:
         return "=== System Uptime ===\nCould not retrieve uptime."
+
+def animated_message(widget, message, delay=0.03):
+    widget.clear()
+    for char in message:
+        widget.insertPlainText(char)
+        QApplication.processEvents()
+        time.sleep(delay)
+
+def get_virus_removal_guide(lang):
+    guides = {
+        "English": (
+            "=== Virus Removal Guide ===\n"
+            "If a virus or suspicious process is detected, try these steps:\n"
+            "1. Disconnect from the internet to prevent further spread.\n"
+            "2. Boot into Safe Mode (Windows: F8 during startup).\n"
+            "3. Open your antivirus and run a full system scan.\n"
+            "4. Follow the antivirus instructions to remove/quarantine threats.\n"
+            "5. Delete suspicious files manually if needed (be careful!).\n"
+            "6. Clear your browser cache and temporary files.\n"
+            "7. Change your passwords after cleaning.\n"
+            "8. Reconnect to the internet and update your system and antivirus.\n"
+            "9. If the virus persists, seek professional help or reinstall your OS.\n"
+            "\n"
+            "Other possibilities:\n"
+            "- If you can't boot: Use a rescue disk or bootable antivirus USB.\n"
+            "- If antivirus can't remove it: Try a different antivirus or malware remover.\n"
+            "- If system is unstable: Backup your data and consider a clean OS reinstall.\n"
+            "- For ransomware: Do NOT pay. Seek professional help and report it.\n"
+            "- For persistent browser popups: Reset or reinstall your browser.\n"
+            "- For unknown processes: Search the process name online before deleting.\n"
+            "\n"
+            "Stay safe! Always keep backups and your system updated."
+        ),
+        "العربية": (
+            "=== دليل إزالة الفيروسات ===\n"
+            "إذا تم اكتشاف فيروس أو عملية مشبوهة، جرب الخطوات التالية:\n"
+            "1. افصل الإنترنت لمنع الانتشار.\n"
+            "2. ادخل إلى الوضع الآمن (ويندوز: F8 أثناء التشغيل).\n"
+            "3. افتح برنامج الحماية وافحص النظام بالكامل.\n"
+            "4. اتبع تعليمات البرنامج لإزالة أو عزل التهديدات.\n"
+            "5. احذف الملفات المشبوهة يدويًا إذا لزم الأمر (كن حذرًا!).\n"
+            "6. امسح ذاكرة المتصفح والملفات المؤقتة.\n"
+            "7. غيّر كلمات المرور بعد التنظيف.\n"
+            "8. أعد الاتصال بالإنترنت وحدّث النظام وبرنامج الحماية.\n"
+            "9. إذا استمر الفيروس، اطلب مساعدة مختص أو أعد تثبيت النظام.\n"
+            "\n"
+            "احتمالات أخرى:\n"
+            "- إذا لم يقلع النظام: استخدم قرص إنقاذ أو USB حماية.\n"
+            "- إذا لم يستطع البرنامج إزالة الفيروس: جرب برنامج حماية آخر.\n"
+            "- إذا كان النظام غير مستقر: انسخ بياناتك وجرّب تثبيت نظيف.\n"
+            "- في حالة برامج الفدية: لا تدفع. اطلب مساعدة مختص وأبلغ الجهات المختصة.\n"
+            "- في حال ظهور نوافذ منبثقة: أعد ضبط أو تثبيت المتصفح.\n"
+            "- للعمليات غير المعروفة: ابحث عن اسم العملية قبل الحذف.\n"
+            "\n"
+            "ابقَ آمنًا! احتفظ بنسخ احتياطية وحدّث نظامك دائمًا."
+        ),
+        "Français": (
+            "=== Guide de Suppression des Virus ===\n"
+            "Si un virus ou un processus suspect est détecté, essayez ces étapes :\n"
+            "1. Déconnectez-vous d'internet pour éviter la propagation.\n"
+            "2. Démarrez en mode sans échec (Windows : F8 au démarrage).\n"
+            "3. Ouvrez votre antivirus et lancez une analyse complète.\n"
+            "4. Suivez les instructions de l'antivirus pour supprimer/quarantaine les menaces.\n"
+            "5. Supprimez manuellement les fichiers suspects si nécessaire (attention !).\n"
+            "6. Videz le cache du navigateur et les fichiers temporaires.\n"
+            "7. Changez vos mots de passe après le nettoyage.\n"
+            "8. Reconnectez-vous à internet et mettez à jour votre système et antivirus.\n"
+            "9. Si le virus persiste, demandez l'aide d'un professionnel ou réinstallez le système.\n"
+            "\n"
+            "Autres possibilités :\n"
+            "- Si le système ne démarre pas : Utilisez un disque de secours ou une clé USB antivirus.\n"
+            "- Si l'antivirus ne peut pas supprimer : Essayez un autre antivirus ou outil anti-malware.\n"
+            "- Si le système est instable : Sauvegardez vos données et envisagez une réinstallation propre.\n"
+            "- Pour les ransomwares : Ne payez pas. Demandez de l'aide et signalez-le.\n"
+            "- Pour les pop-ups persistants : Réinitialisez ou réinstallez le navigateur.\n"
+            "- Pour les processus inconnus : Cherchez le nom du processus avant suppression.\n"
+            "\n"
+            "Restez prudent ! Faites des sauvegardes et gardez votre système à jour."
+        )
+    }
+    return guides.get(lang, guides["English"])
 
 class LanguageSelector(QWidget):
     def __init__(self):
@@ -257,6 +338,9 @@ class SimpleSecurityScanner(QWidget):
     def scan_step5(self):
         self.output.append(get_top_processes(self.lang))
         self.progress.setValue(100)
+        # Show the animated virus removal guide in the selected language
+        guide = get_virus_removal_guide(self.lang)
+        animated_message(self.output, guide)
         self.scan_btn.setEnabled(True)
 
     def save_report(self):
